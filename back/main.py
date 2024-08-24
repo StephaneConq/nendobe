@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from routers import photo_router
+from routers import photo_router, price_router
 
 load_dotenv()
 
@@ -22,6 +22,7 @@ app.add_middleware(
 )
 
 app.include_router(photo_router)
+app.include_router(price_router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

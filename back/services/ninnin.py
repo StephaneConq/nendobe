@@ -15,23 +15,36 @@ def search_prices(name: str):
     container = soup.find('ul', {'class': 'product-grid'})
 
     if not container:
-        print("Container with results not found for ninnin")
+        print(f"Container with results not found for ninnin for nendoroid {name}")
         return []
     
-    conversion_rate = get_conversion()
+    conversion_rate = get_conversion('JPY')
 
     products = container.find_all('li', {'class': 'general_block_card'})
 
     prices = []
     for p in products:
-        price = p.find('span', {'class': 'price'})
-
-        if price:
-            price_value = float(price.text.replace('¥', '').replace(',', ''))
-            
-            if conversion_rate:
-                price_value = price_value / conversion_rate
-            
-            prices.append(price_value)
+        prices.append(create_item(p, conversion_rate))
     
     return prices
+
+def create_item(product, conversion_rate):
+    price = product.find('span', {'class': 'price'})
+    price_value = None
+
+    if price:
+        price_value = float(price.text.replace('¥', '').replace(',', ''))
+        
+        if conversion_rate:
+            price_value = price_value / conversion_rate
+
+    link =  product.find('a', {'class': 'product-name'})
+
+    image = product.find('div', {'class': 'product_image'}).find('img')
+
+    return {
+        "name": link.text.strip(),
+        "url": link.attrs.get('href'),
+        "image": image.attrs.get('src'),
+        "price": price_value
+    }

@@ -1,7 +1,5 @@
 from fastapi import APIRouter, File
 from services.gemini import process_image_with_gemini
-from services import playasia
-from services import ninnin
 from services.firestore import get_nendoroid_by_id
 
 
@@ -22,25 +20,10 @@ async def process_photo(content_type: str, image: bytes = File()):
             return {"error": "Failed to process image"}
         
         nendoroid_doc = get_nendoroid_by_id(res.get('id'))
-        
-        if nendoroid_doc:
-            nendoroid_object = nendoroid_doc
-            name = f"Nendoroid no {nendoroid_doc.get('id')} - {nendoroid_doc.get('name')}"
+
+        if not nendoroid_doc:
+            all_nendoroids.append(res)
         else:
-            nendoroid_object = res
-            name = f"Nendoroid no {res.get('id')} - {res.get('name')}"
-
-        nendoroid_object['prices'] = {
-            'playasia': {
-                'prices': playasia.search_prices(name),
-                'currency': 'EUR'
-            },
-            'ninnin': {
-                'prices': ninnin.search_prices(f"Nendoroid {res.get('name')}"),
-                'currency': 'EUR'
-            }
-        }
-
-        all_nendoroids.append(nendoroid_object)
+            all_nendoroids.append(nendoroid_doc)
         
     return all_nendoroids
