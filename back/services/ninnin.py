@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from services.conversion import get_conversion
+import re
 
 user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36"
 
@@ -33,9 +34,10 @@ def create_item(product, conversion_rate):
     price_value = None
 
     if price:
-        price_value = float(price.text.replace('¥', '').replace(',', ''))
+        # price_value = float(price.text.replace('¥', '').replace(',', ''))
+        price_value = extract_float(price.text)
         
-        if conversion_rate:
+        if conversion_rate and '¥' in price:
             price_value = price_value / conversion_rate
 
     link =  product.find('a', {'class': 'product-name'})
@@ -48,3 +50,10 @@ def create_item(product, conversion_rate):
         "image": image.attrs.get('src'),
         "price": price_value
     }
+
+def extract_float(s):
+    match = re.search(r"[-+]?\d*\.\d+|[-+]?\d+", s)
+    if match:
+        return float(match.group())
+    else:
+        return None

@@ -14,8 +14,6 @@ async def process_photo(content_type: str, image: bytes = File()):
 
     for res in nendoroids_found:
 
-        nendoroid_object = {}
-
         if not res.get('id'):
             return {"error": "Failed to process image"}
         

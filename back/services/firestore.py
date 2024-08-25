@@ -1,6 +1,6 @@
-import firebase_admin
 from firebase_admin import firestore
 import re
+import firebase_admin
 
 app = firebase_admin.initialize_app()
 db = firestore.client()

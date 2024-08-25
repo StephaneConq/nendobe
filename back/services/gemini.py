@@ -6,7 +6,7 @@ import json
 # Initialize the model
 model = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
 
-def  process_image_with_gemini(file, content_type):
+def process_image_with_gemini(file, content_type):
     image_data = base64.b64encode(file).decode("utf-8")
     messages = [
         SystemMessage(
@@ -45,8 +45,11 @@ def  process_image_with_gemini(file, content_type):
 
     try:
         # Print the model's response
+        print('returning', response.content)
+        if response.content == '':
+            return []
         return json.loads(response.content)
     except Exception as e:
         print("Parsing json response failed")
         print(e)
-        return  {"error": "Failed to parse response"}
+        return {"error": "Failed to parse response"}
