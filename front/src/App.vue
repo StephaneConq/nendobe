@@ -6,6 +6,7 @@
         <img src="@/assets/goodsmile_logo.jpg" />
       </div>
       <router-view />
+      <Snackbar />
     </v-main>
   </v-app>
 </template>
@@ -13,10 +14,13 @@
 <script>
 import { computed, watch } from 'vue';
 import { useStore } from 'vuex';
+import Snackbar from '@/components/Snackbar.vue';
 
 export default {
   name: 'App',
-
+  components: {
+    Snackbar
+  },
   setup() {
     const store = useStore();
 

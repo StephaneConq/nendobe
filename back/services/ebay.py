@@ -47,7 +47,7 @@ def search_prices(name: str):
 def _create_item(ebay_item, conversion_rate_usd):
     return {
         "name": ebay_item.get('title'),
-        "url": ebay_item.get('itemHref'),
+        "url": ebay_item.get('itemWebUrl'),
         "image": ebay_item.get('image', {}).get('imageUrl'),
         "price": float(ebay_item.get('price').get('value')) / conversion_rate_usd
     }

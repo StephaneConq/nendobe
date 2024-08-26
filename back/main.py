@@ -2,15 +2,17 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from routers import photo_router, price_router, nendoroid_router
 
 load_dotenv()
+
+from routers import photo_router, price_router, nendoroid_router
 
 app = FastAPI()
 
 origins = [
     "http://localhost",
     "http://localhost:5173",
+    "https://nendobe-pmvbal4k7a-od.a.run.app"
 ]
 
 app.add_middleware(

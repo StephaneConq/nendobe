@@ -2,9 +2,10 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 import base64
 import json
+import os
 
 # Initialize the model
-model = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
+model = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=os.environ.get('GOOGLE_API_KEY'))
 
 def process_image_with_gemini(file, content_type):
     image_data = base64.b64encode(file).decode("utf-8")

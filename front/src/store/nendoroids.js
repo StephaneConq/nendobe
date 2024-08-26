@@ -32,19 +32,37 @@ export default {
         }
     },
     actions: {
-        getNendoroidById( { commit }, nendoroidId) {
+        getNendoroidById( { commit, dispatch }, nendoroidId) {
             commit('utilsStore/setGlobalLoading', true, {root: true});
-            commit('nendoroidsStore/setCurrentNendoroids', []);
-            commit('nendoroidsStore/setPrices', null);
-            commit('nendoroidsStore/setSelectedNendoroid');
+            commit('setCurrentNendoroids', []);
+            commit('setPrices', null);
+            commit('setSelectedNendoroid');
 
             fetch(`${import.meta.env.VITE_API_URL}/nendoroids/${nendoroidId}`).then(response => {
                 response.json().then(nendoroids => {
-                    commit('nendoroidsStore/setCurrentNendoroids', nendoroids);
+
+                    if (nendoroids.length === 0 || nendoroids[0] === null) {
+                        commit('utilsStore/setGlobalLoading', false, {root: true});
+                        commit('utilsStore/setSnackbar', {
+                            displaySnackbar: true,
+                            snackbarInfo: {
+                                text: 'Nendoroid non trouvée avec l\'id ' + nendoroidId,
+                            }
+                        }, {root: true});
+                        setTimeout(() => {
+                            commit('utilsStore/setSnackbar', {
+                                displaySnackbar: false,
+                                snackbarInfo: {}
+                            }, {root: true});
+                        }, 3000);
+                        return;
+                    }
+
+                    commit('setCurrentNendoroids', nendoroids);
                     const promises = [];
 
                     nendoroids.forEach(nendoroid => {
-                        promises.push(dispatch('nendoroidsStore/updatePrices', nendoroid.id));
+                        promises.push(dispatch('updatePrices', nendoroid.id));
                     });
 
                     Promise.all(promises).then(() => {

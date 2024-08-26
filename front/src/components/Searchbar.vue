@@ -1,12 +1,13 @@
 <template>
 
     <v-row class="container">
-        <v-col cols="9">
-            <v-text-field hide-details="auto" label="Saisir un id de Nendoroid"></v-text-field>
+        <v-col cols="8">
+            <v-text-field v-model="modelId" hide-details="auto" label="Saisir un id de Nendoroid"></v-text-field>
         </v-col>
 
-        <v-col cols="3" class="button-container">
-            <v-btn @click="triggerInputfile" icon="mdi-camera" size="large"></v-btn>
+        <v-col cols="4" class="button-container">
+            <v-btn @click="searchById" icon="mdi-send" size="small"></v-btn>
+            <v-btn @click="triggerInputfile" icon="mdi-camera" size="small"></v-btn>
             <input @change="fileUploaded" type="file" id="input-file" accept="image/*" capture="environment"/>
         </v-col>
     </v-row>
@@ -15,6 +16,7 @@
 
 <script>
 import { useStore } from 'vuex';
+import { ref } from 'vue';
 
 export default {
     setup() {
@@ -26,13 +28,22 @@ export default {
         }
 
         const triggerInputfile = () => {
-            const  input = document.getElementById('input-file');
+            const input = document.getElementById('input-file');
             input.click();
+        }
+
+        const modelId = ref('');
+
+        const searchById = () => {
+            console.log('modelId', modelId.value);
+            store.dispatch('nendoroidsStore/getNendoroidById', modelId.value);
         }
 
         return {
             triggerInputfile,
-            fileUploaded
+            fileUploaded,
+            searchById,
+            modelId
         }
     }
 }
@@ -47,7 +58,7 @@ export default {
 
 .button-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 

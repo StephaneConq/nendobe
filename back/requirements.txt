@@ -12,6 +12,7 @@ cffi==1.17.0
 charset-normalizer==3.3.2
 click==8.1.7
 cryptography==43.0.0
+ebaysdk==2.2.0
 fastapi==0.112.1
 firebase-admin==6.5.0
 frozenlist==1.4.1
@@ -42,6 +43,7 @@ langchain-core==0.2.34
 langchain-google-genai==1.0.10
 langchain-text-splitters==0.2.2
 langsmith==0.1.104
+lxml==5.3.0
 msgpack==1.0.8
 multidict==6.0.5
 numpy==1.26.4
